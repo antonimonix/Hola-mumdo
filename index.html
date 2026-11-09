@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Máscara y el Vacío - Abre tu sobre</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .container:active {
+            transform: scale(0.97);
+        }
+
+        .envelope {
+            position: relative;
+            width: 250px;
+            height: 350px;
+            background: linear-gradient(135deg, #1b263b, #415a77);
+            border: 3px solid #ff7518;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(255, 117, 24, 0.3);
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        .envelope.abriendo {
+            animation: rasgar 850ms ease-in forwards;
+        }
+
+        .envelope p {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #cbd5e0;
+        }
+
+        .card {
+            display: none;
+            width: min(320px, 90vw);
+            height: 440px;
+            background: #ffffff;
+            color: #0d1b2a;
+            border-radius: 12px;
+            border: 4px solid #ff7518;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card.visible {
+            display: flex;
+            animation: aparecer 500ms ease forwards;
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #e0e0e0;
+        }
+
+        .card p {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        @keyframes rasgar {
+            0% {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            25% {
+                transform: rotate(-2deg) scale(1.03);
+            }
+            65% {
+                clip-path: polygon(
+                    0 0, 100% 0, 100% 72%, 82% 68%,
+                    65% 75%, 48% 68%, 30% 75%, 14% 69%, 0 74%
+                );
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-25px) rotate(4deg) scale(0.92);
+                clip-path: polygon(
+                    0 0, 100% 0, 100% 72%, 82% 68%,
+                    65% 75%, 48% 68%, 30% 75%, 14% 69%, 0 74%
+                );
+            }
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(30px) rotate(5deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="interactionBox" onclick="abrirSobre()">
+        <div class="envelope" id="envelopeView">
+            <div>
+                <h2>¿Quién querés ser hoy?</h2>
+                <p>Tocá para abrir el sobre</p>
+            </div>
+        </div>
+
+        <div class="card" id="cardView">
+            <img id="maskImage" src="" alt="Tu máscara asignada">
+            <h3>Tu identidad asignada</h3>
+            <p>La máscara que te tocó portar hoy.</p>
+        </div>
+    </div>
+
+    <script>
+        const mascaras = [
+            "mascara1.png",
+            "mascara2.png",
+            "mascara3.png"
+        ];
+
+        let abierto = false;
+
+        function abrirSobre() {
+            if (abierto) return;
+            abierto = true;
+
+            const envelope = document.getElementById("envelopeView");
+            const card = document.getElementById("cardView");
+            const maskImage = document.getElementById("maskImage");
+
+            const indiceAleatorio = Math.floor(Math.random() * mascaras.length);
+            maskImage.src = mascaras[indiceAleatorio];
+
+            envelope.classList.add("abriendo");
+
+            // Revela la carta cuando termina la animación del sobre.
+            setTimeout(() => {
+                envelope.style.display = "none";
+                card.classList.add("visible");
+            }, 850);
+        }
+    </script>
+</body>
+</html>
