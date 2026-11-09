@@ -80,16 +80,40 @@
 
         .card img {
             width: 100%;
-            height: 250px;
+            height: 240px;
             object-fit: cover;
             border-radius: 8px;
             background: #e0e0e0;
         }
 
+        .card h3 {
+            margin: 15px 0 5px 0;
+            color: #0d1b2a;
+        }
+
         .card p {
-            margin-top: 10px;
+            margin: 0;
             font-size: 0.9rem;
             color: #64748b;
+        }
+
+        .btn-reiniciar {
+            display: none;
+            margin-top: 25px;
+            background-color: #ff7518;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 117, 24, 0.4);
+            transition: background 0.2s;
+        }
+
+        .btn-reiniciar:hover {
+            background-color: #e06310;
         }
 
         @keyframes rasgar {
@@ -148,16 +172,31 @@
 
         <div class="card" id="cardView">
             <img id="maskImage" src="" alt="Tu máscara asignada">
-            <h3>Tu identidad asignada</h3>
-            <p>La máscara que te tocó portar hoy.</p>
+            <h3 id="cardTitle">Tu identidad asignada</h3>
+            <p id="cardDesc">La máscara que te tocó portar hoy.</p>
         </div>
     </div>
 
+    <button class="btn-reiniciar" id="btnReiniciar" onclick="reiniciar(event)">🔄 Elegir otra máscara</button>
+
     <script>
+        // Definimos las 3 opciones con su imagen y sus textos personalizados
         const mascaras = [
-            "mascara1.png",
-            "mascara2.png",
-            "mascara3.png"
+            {
+                imagen: "mascara1.png",
+                titulo: "El Espejo Fragmentado",
+                descripcion: "Una mirada hacia la identidad y los pliegues de la memoria."
+            },
+            {
+                imagen: "mascara2.png",
+                titulo: "El Umbral Silencioso",
+                descripcion: "El tránsito entre lo digital y lo matérico en el espacio."
+            },
+            {
+                imagen: "mascara3.png",
+                titulo: "La Mutación del Rostro",
+                descripcion: "Fragmentos que mutan ante la interacción del espectador."
+            }
         ];
 
         let abierto = false;
@@ -169,17 +208,33 @@
             const envelope = document.getElementById("envelopeView");
             const card = document.getElementById("cardView");
             const maskImage = document.getElementById("maskImage");
+            const cardTitle = document.getElementById("cardTitle");
+            const cardDesc = document.getElementById("cardDesc");
+            const btnReiniciar = document.getElementById("btnReiniciar");
 
+            // Elegir una máscara al azar
             const indiceAleatorio = Math.floor(Math.random() * mascaras.length);
-            maskImage.src = mascaras[indiceAleatorio];
+            const elegida = mascaras[indiceAleatorio];
 
+            // Asignar datos a la carta
+            maskImage.src = elegida.imagen;
+            cardTitle.innerText = elegida.titulo;
+            cardDesc.innerText = elegida.descripcion;
+
+            // Animar salida del sobre
             envelope.classList.add("abriendo");
 
-            // Revela la carta cuando termina la animación del sobre.
+            // Revelar la carta y mostrar el botón de reiniciar
             setTimeout(() => {
                 envelope.style.display = "none";
                 card.classList.add("visible");
+                btnReiniciar.style.display = "inline-block";
             }, 850);
+        }
+
+        function reiniciar(evento) {
+            evento.stopPropagation(); // Evita que se dispare otro evento raro
+            location.reload(); // Recarga limpia para otro ciclo de sorteo
         }
     </script>
 </body>
